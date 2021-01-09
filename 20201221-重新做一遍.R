@@ -10,6 +10,7 @@ mwwSel <- mww2 %>%
   rename(id= 登记号,hscrp=超敏C,crp=C反应蛋白,insulin=胰岛素,lps=内毒素,age=年龄,gender=性别,bmi=BMI,wc=腰围,wh=腰臀比,
          edu=教育,mmse=mmse总分,moca=MoCA总分,energy=能量,smoke=吸烟史,drink=饮酒史)
 # 导入新的脂肪酸数据
+# MAC 系统下中文读取有些问题，把原文件中的中文名改成了英文字母
 fa <- read.csv(file = "data/20201201 录入核对数据库 数据清理核对（最终不改版）-脂肪酸.csv")
 
 # 0值变成 NA
@@ -40,11 +41,13 @@ mww_fa$d6d[is.infinite(mww_fa$d6d)] <- NA
 mww_fa$scd16[is.infinite(mww_fa$scd16)] <- NA
 mww_fa$scd18[is.infinite(mww_fa$scd18)] <- NA
 mww_fa <- mww_fa %>%
-  rename(id=登记号)
+  rename(id=djh) # djh = 登记号
 write.csv(mww_fa,file = "data/脂肪酸比例.csv",row.names=F)
 
 # 导入DBI数据
-dbi_score <- read.csv(file = "DBI/DBI膳食质量分数.csv",stringsAsFactors = F)
+# MAC 系统里面最好将csv保存为UTF8格式，然后读取的时候添加选项
+dbi_score <- read.csv(file = "DBI/DBI膳食质量分数 UTF8.csv",stringsAsFactors = F,
+                      fileEncoding = "UTF-8")
 # 转化为整数型
 mwwSel$id <- as.integer(mwwSel$id)
 # 合并数据
@@ -551,6 +554,7 @@ write.csv(e.ac.mlr,file = "coef of ac using MLR.csv",row.names = F)
 write.csv(p.ac.mlr,file = "p value of ac using MLR.csv",row.names = F)
 
 #############mediation analysis for Mplus#########
-mww_dbimplus <- mww_dbi
+mww_dbimplus <- mww_dbi %>%
+  select(-姓名)
 mww_dbimplus[is.na(mww_dbimplus)] <- 999
-write.csv(mww_dbimplus,file = "mplus/mww_dbimplus.csv")
+write.csv(mww_dbimplus,file = "mplus/mww_dbimplus 20210109.csv")
