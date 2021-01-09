@@ -1,0 +1,61 @@
+[[init]]
+iterators = cog fa inf;
+cog=1:13;
+fa = 1:23;
+inf = 1:9;
+
+cogNames#cog=mmse moca MMSEO MMSEC 
+MMSEM MMSEL MoCAN 
+MoCAO MoCAD MoCAA MoCAL MoCAV MoCAAt;
+
+faNames#fa=C140 C150 C160 C161 C170 C180 C181n9c 
+C182n6c C183n6 C183n3 C203n6 C204n6 C205n3 
+C226n3 sfa mufa pufa n3 n6 scd16 scd18 d6d d5d;
+
+infNames#inf=IL1b IL10 NFkB tnf hscrp crp lps  homa 
+quicki;
+
+filename="[[faNames#fa]]-[[infNames#inf]]-[[cogNames#cog]].inp";
+
+outputDirectory = "C:/Users/likai/Desktop/auto3";
+[[/init]]    
+             
+DATA: File is mww_dbimplus.csv;
+             
+VARIABLE: Names are age gender bmi kcal smoke 
+edu drink C140 C150 C160 C161 C170 C180 C181n9c 
+C182n6c C183n6 C183n3 C203n6 C204n6 C205n3 
+C226n3 sfa mufa pufa n3 n6 scd16 scd18 d6d d5d 
+mmse moca MMSEO MMSEC MMSEM MMSEL MoCAN 
+MoCAO MoCAD MoCAA MoCAL MoCAV MoCAAt IL1b 
+IL10 NFkB tnf hscrp crp lps OGTT OGTT2 insulin homa 
+quicki cpep cp2h th dbi1 dbi2 dbi3 dbi4 dbi5 dbi6 dbi7 
+lbs hbs dqd;
+             
+             Usev are  bmi [[cogNames#cog]] [[faNames#fa]]
+                      [[infNames#inf]] age gender edu smoke 
+                      drink kcal;
+             
+             
+             Missing are all(999);
+             
+             
+ANALYSIS:
+bootstrap=1000;
+estimator=ML;
+             
+model:
+[[cogNames#cog]] [[faNames#fa]]
+[[infNames#inf]] bmi age gender edu smoke drink kcal;
+             
+[[cogNames#cog]] on [[faNames#fa]] [[infNames#inf]] bmi age gender smoke drink edu kcal;
+[[infNames#inf]] on [[faNames#fa]] bmi age gender smoke drink edu kcal;
+             
+             
+model indirect:
+[[cogNames#cog]] IND [[faNames#fa]];
+             
+OUTPUT:
+CINTERVAL(bootstrap);
+
+           
