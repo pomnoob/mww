@@ -1,6 +1,7 @@
 library(MplusAutomation)
 
-createModels("C:/Users/likai/OneDrive/OneDrive - Business/首医/数据/mww/mww/mplus/auto2/temp.inp")
+# windows 系统下
+# createModels("C:/Users/likai/OneDrive/OneDrive - Business/首医/数据/mww/mww/mplus/auto2/temp.inp")
 
 
 #批量计算，批量保存结果，批量整理结果
@@ -71,9 +72,11 @@ save(mediation.result2,file = )
 
 
 #炎症因子也做一遍
-createModels("C:/Users/likai/Desktop/auto3/temp.inp")
-runModels("C:/Users/likai/Desktop/auto3")
-infresult <- readModels("C:/Users/likai/Desktop/auto3")
+# MAC 系统下
+createModels("mplus/auto3/temp.inp")
+# createModels("C:/Users/likai/Desktop/auto3/temp.inp")
+runModels("mplus/auto3")
+infresult <- readModels("mplus/auto3/")
 
 total.e <- double()#总效应值
 total.p <- double()#总效应p
@@ -103,5 +106,15 @@ for (i in 1:length(modelnames)) {
   }
 }
 
-mediation.result.inf <- data.frame(Xinf,Minf,Yinf,total.e,total.p,indirect.e,indirect.p,direct.e,direct.p)
-write.csv(mediation.result.inf,file = "mediation FA inflammation Cog.csv",row.names = F)
+mediation.result.inf <- data.frame(x=Xinf,
+                                   m=Minf,
+                                   y=Yinf,
+                                   total.e,
+                                   total.p,
+                                   indirect.e,
+                                   indirect.p,
+                                   direct.e,
+                                   direct.p)
+
+write.csv(mediation.result.inf,file = "mplus/mediation FA inflammation Cog.csv",
+          row.names = F)

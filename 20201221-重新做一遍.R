@@ -555,6 +555,18 @@ write.csv(p.ac.mlr,file = "p value of ac using MLR.csv",row.names = F)
 
 #############mediation analysis for Mplus#########
 mww_dbimplus <- mww_dbi %>%
-  select(-姓名)
+  select(age,gender,bmi,smoke,drink,energy,
+         mmse,moca,23:33,66:86,sfa,mufa,IL1β2,IL102,NFkB2,tnf3,
+         hscrp3,crp3,lps,OGTT,OGTT2,insulin,homa2,quicki2,
+         dbi1:dbi7,lbs,hbs,dqd)%>%
+  mutate(kcal=energy/1000,
+         d6d=d6d*100,
+         scd16=scd16*10) # 确保数量级
+
 mww_dbimplus[is.na(mww_dbimplus)] <- 999
-write.csv(mww_dbimplus,file = "mplus/mww_dbimplus 20210109.csv")
+
+
+
+write.csv(mww_dbimplus,file = "mplus/mww_dbimplus 20210109.csv",fileEncoding = "UTF-8",
+          row.names = F)
+# 然后使用MplusAutomation进行中介分析
